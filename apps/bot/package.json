@@ -1,5 +1,16 @@
 {
     "name": "@nyx/bot",
     "version": "1.0.0",
-    "type": "module"
+    "type": "module",
+    "devDependencies": {
+        "@types/node": "^24.3.0"
+    },
+    "dependencies": {
+        "@nyx/db": "workspace:*",
+        "discord.js": "^14.21.0",
+        "drizzle-orm": "^0.44.4",
+        "postgres": "^3.4.7",
+        "winston": "^3.17.0",
+        "zod": "^4.0.17"
+    }
 }

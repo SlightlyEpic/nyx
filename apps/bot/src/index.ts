@@ -1,0 +1,1 @@
+import * as schema from '@nyx/db/schema';

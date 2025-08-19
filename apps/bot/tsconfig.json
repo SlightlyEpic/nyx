@@ -1,0 +1,12 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "composite": true,
+        "module": "nodenext",
+        "target": "es2022",
+        "moduleResolution": "nodenext",
+        "strict": true,
+        "types": ["node"]
+    },
+    "include": ["./src/**/*"],
+}
