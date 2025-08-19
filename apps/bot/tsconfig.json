@@ -2,11 +2,16 @@
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
-        "module": "nodenext",
+        "module": "es2022",
         "target": "es2022",
-        "moduleResolution": "nodenext",
+        "moduleResolution": "bundler",
         "strict": true,
-        "types": ["node"]
+        "types": ["node"],
+        "rootDir": "./src",
+        "outDir": "dist",
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "include": ["./src/**/*"],
 }

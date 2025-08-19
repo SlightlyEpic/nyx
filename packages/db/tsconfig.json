@@ -9,5 +9,5 @@
         "strict": true,
     },
     "include": ["./src/*.ts"],
-    "exclude": ["./drizzle.config.ts"]
+    "exclude": ["./drizzle.config.ts", "./tsup.config.ts"]
 }
