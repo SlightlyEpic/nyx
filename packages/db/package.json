@@ -1,0 +1,10 @@
+{
+    "name": "@nyx/db",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "type": "module",
+    "dependencies": {
+        "drizzle-orm": "^0.30.10",
+        "pg": "^8.16.3"
+    }
+}
