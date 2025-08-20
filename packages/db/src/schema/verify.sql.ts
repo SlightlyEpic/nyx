@@ -6,7 +6,7 @@ export const verifiedUsers = pgTable('verified_users', {
     id: serial('id').primaryKey().notNull(),
     discordId: text('discord_id').notNull().unique(),
     gradYear: integer('graduation_year').notNull(),
-    branch: branchEnum('branch'),
+    branch: branchEnum('branch').notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
 });
 
