@@ -5,18 +5,18 @@
     "type": "module",
     "exports": {
         "./schema": {
+            "import": "./src/schema.ts",
             "node": {
-                "default": "./dist/schema.js",
-                "types": "./dist/schema.d.ts"
-            },
-            "import": "./src/schema.ts"
+                "types": "./dist/schema.d.ts",
+                "default": "./dist/schema.js"
+            }
         },
         "./util": {
+            "import": "./src/util.ts",
             "node": {
-                "default": "./dist/util.js",
-                "types": "./dist/util.d.ts"
-            },
-            "import": "./src/util.ts"
+                "types": "./dist/util.d.ts",
+                "default": "./dist/util.js"
+            }
         }
     },
     "scripts": {
