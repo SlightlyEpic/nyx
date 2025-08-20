@@ -2,6 +2,9 @@
     "name": "nyx-monorepo",
     "private": true,
     "version": "1.0.0",
+    "scripts": {
+        "auth:generate": "pnpx @better-auth/cli generate --config apps/web/server/lib/auth.ts --output packages/db/src/schema/auth.sql.ts --y"
+    },
     "workspaces": [
         "apps/*",
         "packages/*"

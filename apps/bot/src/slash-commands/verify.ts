@@ -59,6 +59,8 @@ export default {
                     .insert(verifyLinks)
                     .values({
                         creatorDiscordId: interaction.user.id,
+                        creatorUsername: interaction.user.username,
+                        creatorImageUrl: interaction.user.avatarURL() ?? 'https://cdn.discordapp.com/embed/avatars/0.png',
                         expiry: new Date(Date.now() + LINK_EXPIRY_DURATION),
                         secret: randomString32(),
                     })
