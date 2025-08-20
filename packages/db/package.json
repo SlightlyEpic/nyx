@@ -6,10 +6,17 @@
     "exports": {
         "./schema": {
             "node": {
-                "types": "./dist/schema.d.ts",
-                "default": "./dist/schema.js"
+                "default": "./dist/schema.js",
+                "types": "./dist/schema.d.ts"
             },
             "import": "./src/schema.ts"
+        },
+        "./util": {
+            "node": {
+                "default": "./dist/util.js",
+                "types": "./dist/util.d.ts"
+            },
+            "import": "./src/util.ts"
         }
     },
     "scripts": {
@@ -23,6 +30,7 @@
         "@types/node": "^24.3.0",
         "dotenv": "^17.2.1",
         "drizzle-kit": "^0.31.4",
+        "postgres": "^3.4.7",
         "tsup": "^8.5.0"
     }
 }

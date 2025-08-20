@@ -1,5 +1,7 @@
+import type winston from 'winston'
 import type { Bot } from '@/structures/client';
 import type { getDB } from '@/utils/db';
+import { Env } from '@/utils/env';
 import type {
     ButtonInteraction,
     ChatInputCommandInteraction,
@@ -12,6 +14,8 @@ import type {
 export type CommandDependencies = {
     client: Bot;
     db: ReturnType<typeof getDB>;
+    env: Env;
+    logger: winston.Logger;
 };
 
 export interface SlashCommand {

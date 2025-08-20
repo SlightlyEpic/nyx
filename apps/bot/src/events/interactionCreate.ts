@@ -6,6 +6,8 @@ export default new Event('interactionCreate', (d) => async (interaction) => {
     const cmdDeps: CommandDependencies = {
         client: d.client,
         db: d.db,
+        env: d.env,
+        logger: d.logger,
     };
 
     if (interaction.isChatInputCommand()) {

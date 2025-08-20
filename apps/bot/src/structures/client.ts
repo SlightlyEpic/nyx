@@ -1,3 +1,4 @@
+import type winston from 'winston';
 import events from '@/events';
 import slashCommands from '@/slash-commands';
 import type {
@@ -20,14 +21,13 @@ import type { EventDependencies } from './event';
 export type BotConfig = {
     env: Env;
     db: ReturnType<typeof getDB>;
+    logger: winston.Logger;
 };
 
 export class Bot extends Client {
-    slashCommands: Collection<string, SlashCommand> = new Collection();
-    userContextMenuCommands: Collection<string, UserContextMenuCommand> =
-        new Collection();
-    messageContextMenuCommands: Collection<string, MessageContextMenuCommand> =
-        new Collection();
+    slashCommands = new Collection<string, SlashCommand>();
+    userContextMenuCommands = new Collection<string, UserContextMenuCommand>();
+    messageContextMenuCommands = new Collection<string, MessageContextMenuCommand>();
 
     constructor(
         public config: BotConfig,
@@ -73,6 +73,8 @@ export class Bot extends Client {
         const evtDeps: EventDependencies = {
             client: this,
             db: this.config.db,
+            env: this.config.env,
+            logger: this.config.logger,
         };
         events.forEach((evt) => {
             // @ts-ignore TS is dumb and cant prove that this is correct
