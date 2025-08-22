@@ -1,13 +1,15 @@
 import type winston from 'winston'
 import type { Bot } from '@/structures/client';
-import type { getDB } from '@/utils/db';
+import type { getDB } from '@/lib/db';
 import { Env } from '@/utils/env';
+import type { EmailTransport } from '@/lib/nodemailer';
 import type {
     ButtonInteraction,
     ChatInputCommandInteraction,
     ContextMenuCommandBuilder,
     MessageContextMenuCommandInteraction,
     SlashCommandBuilder,
+    SlashCommandOptionsOnlyBuilder,
     UserContextMenuCommandInteraction,
 } from 'discord.js';
 
@@ -16,10 +18,11 @@ export type CommandDependencies = {
     db: ReturnType<typeof getDB>;
     env: Env;
     logger: winston.Logger;
+    nodemailer: EmailTransport;
 };
 
 export interface SlashCommand {
-    builder: SlashCommandBuilder;
+    builder: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
     chatCommandHandler: (
         interaction: ChatInputCommandInteraction,
         d: CommandDependencies,

@@ -28,8 +28,20 @@ export class Result<T, E> {
         };
     }
 
+    static ofAsync<T, E>(f: () => PromiseLike<T>) {
+        return {
+            withCatch: async (g: (_err: unknown) => E): Promise<Result<T, E>> => {
+                try {
+                    return new Result(true, await f());
+                } catch(_err: unknown) {
+                    return new Result(false, g(_err));
+                }
+            }
+        };
+    }
+
     unwrap(): T {
-        if(!this.r.ok) throw Error("Called Result.unwrap() on an Err value");
+        if(!this.r.ok) throw Error("Called Result.unwrap() on an Err value", { cause: this.r.error });
         return this.r.value;
     }
 
@@ -46,7 +58,7 @@ export class Result<T, E> {
     }
 
     expect(msg: string): T {
-        if(!this.r.ok) throw Error(msg);
+        if(!this.r.ok) throw Error(msg, { cause: this.r.error });
         return this.r.value;
     }
 

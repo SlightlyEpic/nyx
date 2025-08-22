@@ -8,17 +8,19 @@ export const verifiedUsers = pgTable('verified_users', {
     gradYear: integer('graduation_year').notNull(),
     branch: branchEnum('branch').notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
-});
+}, (table) => [
+    index('verified_users_discord_id_index').on(table.discordId),
+]);
 
 export const verifyLinks = pgTable('verify_links', {
     id: serial('id').primaryKey().notNull(),
     creatorDiscordId: text('creator_discord_id').notNull(),
-    creatorUsername: text('creator_username').notNull(),
-    creatorImageUrl: text('creator_image_url').notNull(),
+    creatorBranch: branchEnum('creator_branch').notNull(),
+    creatorGradYear: integer('creator_grad_year').notNull(),
     secret: char('secret', { length: 32 }).notNull(),
     expiry: timestamp('expiry', { mode: 'date' }).notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
 }, (table) => [
-    index('link_secret_index').on(table.secret),
-    index('link_creator_id').on(table.creatorDiscordId),
+    index('verify_links_secret_index').on(table.secret),
+    index('verify_links_creator_id_index').on(table.creatorDiscordId),
 ]);

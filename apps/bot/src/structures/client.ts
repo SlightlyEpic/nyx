@@ -7,9 +7,10 @@ import type {
     UserContextMenuCommand,
 } from '@/types/command';
 // import { sendHook } from "@/utils/functions";
-import { logger } from '@/utils/logger';
+import { logger } from '@/lib/logger';
 import type { Env } from '@/utils/env';
-import type { getDB } from '@/utils/db';
+import type { getDB } from '@/lib/db';
+import type { EmailTransport } from '@/lib/nodemailer';
 import {
     type ApplicationCommandDataResolvable,
     Client,
@@ -22,6 +23,7 @@ export type BotConfig = {
     env: Env;
     db: ReturnType<typeof getDB>;
     logger: winston.Logger;
+    nodemailer: EmailTransport;
 };
 
 export class Bot extends Client {
@@ -75,6 +77,7 @@ export class Bot extends Client {
             db: this.config.db,
             env: this.config.env,
             logger: this.config.logger,
+            nodemailer: this.config.nodemailer,
         };
         events.forEach((evt) => {
             // @ts-ignore TS is dumb and cant prove that this is correct

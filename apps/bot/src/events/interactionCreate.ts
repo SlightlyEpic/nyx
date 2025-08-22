@@ -1,6 +1,6 @@
 import { Event } from '@/structures/event';
 import type { CommandDependencies } from '@/types/command';
-import { logger } from '@/utils/logger';
+import { logger } from '@/lib/logger';
 
 export default new Event('interactionCreate', (d) => async (interaction) => {
     const cmdDeps: CommandDependencies = {
@@ -8,6 +8,7 @@ export default new Event('interactionCreate', (d) => async (interaction) => {
         db: d.db,
         env: d.env,
         logger: d.logger,
+        nodemailer: d.nodemailer,
     };
 
     if (interaction.isChatInputCommand()) {
