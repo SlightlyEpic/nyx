@@ -6,6 +6,7 @@ import type { Bot } from '@/structures/client';
 import { Result } from '@/utils/result';
 import schema from '@nyx/db/schema';
 import { eq } from 'drizzle-orm';
+import { addRoles } from '@/utils/bot';
 
 export type WebServerDeps = {
     env: Env,
@@ -32,7 +33,19 @@ export function createWebServer(d: WebServerDeps): express.Express {
                     where: (vLinks, { eq, and, lt }) => and(
                         eq(vLinks.secret, secret),
                         lt(vLinks.expiry, now),
-                    )
+                    ),
+                    with: {
+                        tags: {
+                            with: {
+                                tag: {
+                                    columns: {
+                                        roleId: true,
+                                        name: false,
+                                    }
+                                }
+                            }
+                        }
+                    },
                 }))
                 .withCatch(_err => _err))
                 .expect('Database query error')
@@ -42,27 +55,36 @@ export function createWebServer(d: WebServerDeps): express.Express {
                 return;
             }
 
-            const result = (await Result
+            const user = (await Result
                 .ofAsync(() => d.db.transaction(async tx => {
-                    await tx
+                    const user = (await tx
                         .insert(schema.verifiedUsers)
                         .values({
-                            discordId: link.creatorDiscordId,
-                            branch: link.creatorBranch,
-                            gradYear: link.creatorGradYear,
+                            discordId: link.targetDiscordId,
                             createdAt: now,
-                        });
+                        })
+                        .returning())[0];
+                    
+                    await tx
+                        .insert(schema.userTags)
+                        .values(link.tags.map(tag => ({
+                            userId: user.id,
+                            tagName: tag.tagName,
+                        })));
                     
                     await tx
                         .delete(schema.verifyLinks)
                         .where(eq(schema.verifyLinks.id, link.id));
+                    
+                    return user;
                 }))
                 .withCatch(_err => _err))
                 .expect('Database update error')
             
             res.send('Verification successful! Your server roles will be updated shortly.')
 
-            // TODO: Modify roles
+            // Can silently fail
+            addRoles(d.env, d.bot, user.discordId, link.tags.map(tag => tag.tag.roleId));
         } catch(_err: any) {
             d.logger.error(_err.message || _err)
             res.status(500).send('Internal server error' + (_err.message ? `: ${_err.message}` : ''));

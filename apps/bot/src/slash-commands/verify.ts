@@ -58,18 +58,27 @@ export default {
             }
 
             const yearShortStr = match[0];
+            const yearShort = Number(yearShortStr);
+            if(yearShort < 22 || yearShort > 25) {
+                await interaction.editReply({
+                    content: `Role for year '${yearShort + 4} not found. Please contact an admin to get one created.`
+                });
+                return;
+            }
+            const yearTagName = `Y_${yearShort + 4}`;   // Y_<grad year>
+
             const branchCode = match[1].toUpperCase() as 'BCS' | 'BDS' | 'BEC';
-            const branchStr: typeof schema.branchEnum.enumValues[number] = branchCode === 'BCS'
-                    ? 'CSE'
+            const branchTagName = branchCode === 'BCS'
+                    ? 'B_CSE'
                     : branchCode === 'BDS'
-                        ? 'DSAI'
-                        : 'ECE';
+                        ? 'B_DSAI'
+                        : 'B_ECE';
 
             // Check for already existing links
             const existingLink = (await Result
                 .ofAsync(async () => db.query.verifyLinks.findFirst({
                     where: (vLinks, { eq, lt, and }) => and(
-                        eq(vLinks.creatorDiscordId, interaction.user.id),
+                        eq(vLinks.targetDiscordId, interaction.user.id),
                         lt(vLinks.expiry, new Date()),
                     )
                 }))
@@ -87,17 +96,27 @@ export default {
             
             // Create a new link if one doesn't already exist
             const createdLink = (await Result
-                .ofAsync(async () => (await db
-                    .insert(schema.verifyLinks)
-                    .values({
-                        creatorDiscordId: interaction.user.id,
-                        creatorBranch: branchStr,
-                        creatorGradYear: 2000 + Number(yearShortStr),
-                        expiry: new Date(Date.now() + LINK_EXPIRY_MSEC),
-                        secret: randomString32(),
-                    })
-                    .returning())[0]
-                )
+                .ofAsync(() => db.transaction(async tx => {
+                    const link = (await tx
+                        .insert(schema.verifyLinks)
+                        .values({
+                            targetDiscordId: interaction.user.id,
+                            // creatorBranch: branchTag,
+                            // creatorGradYear: 2000 + Number(yearShortStr),
+                            expiry: new Date(Date.now() + LINK_EXPIRY_MSEC),
+                            secret: randomString32(),
+                        })
+                        .returning())[0];
+                    
+                    await tx
+                        .insert(schema.linkTags)
+                        .values([
+                            { linkId: link.id, tagName: branchTagName },
+                            { linkId: link.id, tagName: yearTagName },
+                        ]);
+                    
+                    return link;
+                }))
                 .withCatch(_err => _err))
                 .expect('Database insert failure');
             

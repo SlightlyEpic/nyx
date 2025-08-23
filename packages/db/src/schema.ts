@@ -3,13 +3,21 @@
 // so all types that rely on the database schema collapse
 // Weirdly enough manually importing each symbol fixes this
 
-import { branchEnum, verifiedUsers, verifyLinks } from './schema/verify.sql';
+import {
+    verifiedUsers, verifiedUsersRelations,
+    verifyLinks, verifyLinksRelations,
+    tags, tagsRelations,
+    linkTags, linkTagsRelations,
+    userTags, userTagsRelations,
+} from './schema/verify.sql';
 import { account, session, user, verification } from './schema/auth.sql';
 
 export default {
-    branchEnum,
-    verifiedUsers,
-    verifyLinks,
+    verifiedUsers, verifiedUsersRelations,
+    verifyLinks, verifyLinksRelations,
+    tags, tagsRelations,
+    linkTags, linkTagsRelations,
+    userTags, userTagsRelations,
 
     account,
     session,
