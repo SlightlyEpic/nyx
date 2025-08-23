@@ -139,7 +139,7 @@ export default {
                 .expect('Failed to send email');
 
             await interaction.editReply({
-                content: `Successfully sent an verification email to ${email}. Please check your inbox.`,
+                content: `Successfully sent an verification email to \`${email}\`. Please check your inbox for an email from \`${env.NODEMAILER_EMAIL}\`.`,
             });
         } catch(_err: any) {
             logger.error(_err.message || _err)
