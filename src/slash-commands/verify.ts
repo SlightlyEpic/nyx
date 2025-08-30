@@ -49,7 +49,7 @@ export default {
                 return;
             }
 
-            const emailRegex = /^(\d\d)(bcs|bds|bec)(\d\d\d)@iiitdwd\.ac\.in$/gi;
+            const emailRegex = /^(\d\d)(bcs|bds|bda|bec)(\d\d\d)@iiitdwd\.ac\.in$/gi;
             const match = emailRegex.exec(email);
             if(!match) {
                 await interaction.editReply({
@@ -69,13 +69,13 @@ export default {
             // MAGIC: make sure this matches with the database records
             const yearTagName = `Y_${yearShort + 4}`;   // Y_<grad year>
 
-            const branchCode = match[2].toUpperCase() as 'BCS' | 'BDS' | 'BEC';
-            // MAGIC: make sure this matches with the database records
-            const branchTagName = branchCode === 'BCS'
-                    ? 'B_CSE'
-                    : branchCode === 'BDS'
-                        ? 'B_DSAI'
-                        : 'B_ECE';
+            const branchCode = match[2].toUpperCase() as 'BCS' | 'BDS' | 'BEC' | 'BDA';
+            const branchTagName = ({
+                'BCS': 'B_CSE',
+                'BDS': 'B_DSAI',
+                'BDA': 'B_DSAI',
+                'BEC': 'B_ECE'
+            } as const)[branchCode];
 
             // Check for already existing links
             const existingLink = (await Result
@@ -97,7 +97,7 @@ export default {
                     .toHuman();
                 const linkExpiryHumanStr = LINK_EXPIRY_DURATION.toHuman({ listStyle: 'long' });
                 await interaction.editReply({
-                    content: `A link has already been sent within the last ${linkExpiryHumanStr}. Try again after ${validForStr})`,
+                    content: `A link has already been sent within the last ${linkExpiryHumanStr}. Try again after ${validForStr}`,
                 });
                 return;
             }
