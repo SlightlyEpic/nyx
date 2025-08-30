@@ -1,6 +1,5 @@
 import { Event } from '@/structures/event';
 import type { CommandDependencies } from '@/types/command';
-import { logger } from '@/lib/logger';
 
 export default new Event('interactionCreate', (d) => async (interaction) => {
     const cmdDeps: CommandDependencies = {
@@ -25,7 +24,7 @@ export default new Event('interactionCreate', (d) => async (interaction) => {
         try {
             return cmd.chatCommandHandler(interaction, cmdDeps);
         } catch (err: unknown) {
-            logger.error(
+            d.logger.error(
                 `Error executing slash command ${interaction.commandName}\n`,
                 err,
             );
@@ -49,7 +48,7 @@ export default new Event('interactionCreate', (d) => async (interaction) => {
                 return cmd.buttonHandler(interaction, cmdDeps);
             else return;
         } catch (err: unknown) {
-            logger.error(
+            d.logger.error(
                 `Error executing button handler for ${commandName}\n`,
                 err,
             );
@@ -72,7 +71,7 @@ export default new Event('interactionCreate', (d) => async (interaction) => {
         try {
             return cmd.userContextMenuHandler(interaction, cmdDeps);
         } catch (err: unknown) {
-            logger.error(
+            d.logger.error(
                 `Error executing user context menu command ${interaction.commandName}\n`,
                 err,
             );
@@ -95,7 +94,7 @@ export default new Event('interactionCreate', (d) => async (interaction) => {
         try {
             return cmd.messageContextMenuHandler(interaction, cmdDeps);
         } catch (err: unknown) {
-            logger.error(
+            d.logger.error(
                 `Error executing message context menu command ${interaction.commandName}\n`,
                 err,
             );

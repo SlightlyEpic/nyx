@@ -1,13 +1,14 @@
 import 'dotenv/config';
 import { GatewayIntentBits } from 'discord.js';
 import { Bot } from './structures/client';
-import { logger } from './lib/logger';
+import { createLogger } from './lib/logger';
 import { readEnv } from './utils/env';
 import { getDB } from './lib/db';
 import { createNodemailer } from './lib/nodemailer';
 import { createWebServer } from './web/server';
 
 const env = readEnv();
+const logger = createLogger(env);
 const db = getDB();
 const nodemailer = createNodemailer(env);
 
@@ -28,6 +29,6 @@ const webServer = createWebServer({
 });
 
 client.start();
-webServer.listen(env.PORT, env.IP, () => {
-    logger.info(`Listening on ${env.IP}:${env.PORT}`);
+webServer.listen(env.PORT, env.HOST, () => {
+    logger.info(`Listening on ${env.HOST}:${env.PORT}`);
 });

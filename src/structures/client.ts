@@ -6,8 +6,6 @@ import type {
     SlashCommand,
     UserContextMenuCommand,
 } from '@/types/command';
-// import { sendHook } from "@/utils/functions";
-import { logger } from '@/lib/logger';
 import type { Env } from '@/utils/env';
 import type { getDB } from '@/lib/db';
 import type { EmailTransport } from '@/lib/nodemailer';
@@ -48,7 +46,7 @@ export class Bot extends Client {
         const slashCommandsData: ApplicationCommandDataResolvable[] = [];
 
         slashCommands.forEach((command) => {
-            logger.info(`Loaded command ${command.builder.name} ✅`);
+            this.config.logger.info(`Loaded command ${command.builder.name} ✅`);
             this.slashCommands.set(command.builder.name, command);
             slashCommandsData.push(command.builder.toJSON());
         });
@@ -56,18 +54,18 @@ export class Bot extends Client {
         this.once('ready', async () => {
             const guildId = this.config.env.DEV_GUILD_ID;
 
-            logger.info('Loading application (/) commands.');
+            this.config.logger.info('Loading application (/) commands.');
 
             // ? Dont you need to register the commands with discord
             if (guildId) {
-                logger.info(`Setting slash commands in ${guildId}`);
+                this.config.logger.info(`Setting slash commands in ${guildId}`);
                 this.guilds.cache.get(guildId)?.commands.set(slashCommandsData);
             } else {
-                logger.error('Put a valid DEV_GUILD_ID in .env');
+                this.config.logger.error('Put a valid DEV_GUILD_ID in .env');
                 process.exit();
             }
 
-            logger.info('Finished loading application (/) commands.');
+            this.config.logger.info('Finished loading application (/) commands.');
         });
     }
 

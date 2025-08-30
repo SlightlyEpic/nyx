@@ -1,4 +1,5 @@
 import express from 'express';
+import morgan from 'morgan';
 import type { getDB } from '@/lib/db';
 import { Env } from '@/utils/env';
 import type winston from 'winston';
@@ -17,6 +18,14 @@ export type WebServerDeps = {
 
 export function createWebServer(d: WebServerDeps): express.Express {
     const app = express();
+
+    const stream: morgan.StreamOptions = {
+        write: (message) => {
+            d.logger.http(message.trim());
+        },
+    };
+
+    app.use(morgan('short', { stream }));
 
     app.get('/healthz', (req, res) => {
         res.send('Healthy');

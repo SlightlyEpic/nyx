@@ -1,6 +1,5 @@
 import { Event } from "@/structures/event";
-import { logger } from "@/lib/logger";
 
 export default new Event("ready", (d) => async (client) => {
-    logger.info(`Logged in as ${client.user?.tag}`);
+    d.logger.info(`Logged in as ${client.user?.tag}`);
 });

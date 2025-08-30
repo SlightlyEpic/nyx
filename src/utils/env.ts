@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-    IP: z.string().min(1),
+    HOST: z.string().min(1),
     PORT: z.coerce.number().positive(),
 
     DISCORD_TOKEN: z.string().min(1),
@@ -16,13 +16,15 @@ const envSchema = z.object({
 
     NODEMAILER_EMAIL: z.string().min(1),
     NODEMAILER_PASSWD: z.string().min(1),
+
+    LOG_LEVEL: z.string().min(1),
 });
 
 export type Env = z.infer<typeof envSchema>;
 
 export function readEnv(): Env {
     const maybeEnv: Partial<z.input<typeof envSchema>> = {
-        IP: process.env.IP,
+        HOST: process.env.HOST,
         PORT: process.env.PORT,
         DISCORD_TOKEN: process.env.DISCORD_TOKEN,
         DEV_GUILD_ID: process.env.DEV_GUILD_ID,
@@ -34,6 +36,7 @@ export function readEnv(): Env {
         POSTGRES_DATABASE: process.env.POSTGRES_DATABASE,
         NODEMAILER_EMAIL: process.env.NODEMAILER_EMAIL,
         NODEMAILER_PASSWD: process.env.NODEMAILER_PASSWD,
+        LOG_LEVEL: process.env.LOG_LEVEL,
     };
 
     const parseResult = envSchema.safeParse(maybeEnv);
