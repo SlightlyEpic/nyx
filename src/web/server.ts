@@ -18,6 +18,10 @@ export type WebServerDeps = {
 export function createWebServer(d: WebServerDeps): express.Express {
     const app = express();
 
+    app.get('/healthz', (req, res) => {
+        res.send('Healthy');
+    });
+
     app.get('/verify/:secret', async (req, res) => {
         const secret = req.params.secret;
 
