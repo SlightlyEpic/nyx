@@ -10,7 +10,6 @@ import {
     linkTags, linkTagsRelations,
     userTags, userTagsRelations,
 } from './schema/verify.sql';
-import { account, session, user, verification } from './schema/auth.sql';
 
 export default {
     verifiedUsers, verifiedUsersRelations,
@@ -18,9 +17,4 @@ export default {
     tags, tagsRelations,
     linkTags, linkTagsRelations,
     userTags, userTagsRelations,
-
-    account,
-    session,
-    user,
-    verification,
 };

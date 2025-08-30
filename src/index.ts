@@ -16,8 +16,6 @@ export const client = new Bot(
     {
         intents: [
             GatewayIntentBits.Guilds,
-            GatewayIntentBits.GuildMessages,
-            GatewayIntentBits.GuildMembers,
         ],
     },
 );
@@ -31,5 +29,5 @@ const webServer = createWebServer({
 
 client.start();
 webServer.listen(`${env.IP}:${env.PORT}`, () => {
-    console.log(`Listening on ${env.IP}:${env.PORT}`);
+    logger.info(`Listening on ${env.IP}:${env.PORT}`);
 });

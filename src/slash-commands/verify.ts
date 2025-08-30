@@ -3,7 +3,7 @@ import { randomBytes } from 'crypto';
 import { DateTime, Duration } from 'luxon';
 import type { SlashCommand } from '@/types/command';
 import { Result } from '@/utils/result';
-import schema from '@nyx/db/schema';
+import schema from '@/db/schema';
 
 export function randomString32() {
     // 16 random bytes == 32 hex characters

@@ -4,7 +4,7 @@ import { Env } from '@/utils/env';
 import type winston from 'winston';
 import type { Bot } from '@/structures/client';
 import { Result } from '@/utils/result';
-import schema from '@nyx/db/schema';
+import schema from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { addRoles } from '@/utils/bot';
 

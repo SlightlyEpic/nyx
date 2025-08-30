@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
-import schema from '@nyx/db/schema';
+import schema from '@/db/schema';
 
 export function getDB(conn?: {
     user: string;

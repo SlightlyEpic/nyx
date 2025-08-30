@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig.base.json",
+    "extends": "./tsconfig.base.json",
     "compilerOptions": {
         "composite": true,
         "module": "es2022",
@@ -13,5 +13,6 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["./src/**/*"],
+    "include": ["./src/*", "./src/**/*", "./src/**/**/*"],
+    "exclude": ["tsup.config.ts", "drizzle.config.ts"]
 }
