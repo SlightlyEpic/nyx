@@ -66,9 +66,11 @@ export default {
                 });
                 return;
             }
+            // MAGIC: make sure this matches with the database records
             const yearTagName = `Y_${yearShort + 4}`;   // Y_<grad year>
 
             const branchCode = match[2].toUpperCase() as 'BCS' | 'BDS' | 'BEC';
+            // MAGIC: make sure this matches with the database records
             const branchTagName = branchCode === 'BCS'
                     ? 'B_CSE'
                     : branchCode === 'BDS'
@@ -114,6 +116,7 @@ export default {
                         .values([
                             { linkId: link.id, tagName: branchTagName },
                             { linkId: link.id, tagName: yearTagName },
+                            { linkId: link.id, tagName: 'SURVIVED_ORIENTATION' },       // MAGIC: make sure this matches with the database record
                         ]);
                     
                     return link;
