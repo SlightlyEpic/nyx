@@ -18,7 +18,7 @@ export default {
         .setName('verify')
         .setDescription('Verify your discord account with your college email. Your email/identity is NOT stored.')
         .addStringOption(opt => opt
-            .setName('College Email')
+            .setName('college_email')
             .setDescription('A verification email will be sent to your inbox')
             .setRequired(true)
         ),
@@ -40,7 +40,7 @@ export default {
                 return;
             }
 
-            const email = interaction.options.getString('College Email')!.toLowerCase();
+            const email = interaction.options.getString('college_email')!.toLowerCase();
 
             if(!email.endsWith('@iiitdwd.ac.in')) {
                 await interaction.editReply({
