@@ -49,7 +49,8 @@ export default {
                 return;
             }
 
-            const match = email.match(/^(\d\d)(bcs|bds|bec)(\d\d\d)@iiitdwd\.ac\.in$/gi);
+            const emailRegex = /^(\d\d)(bcs|bds|bec)(\d\d\d)@iiitdwd\.ac\.in$/gi;
+            const match = emailRegex.exec(email);
             if(!match) {
                 await interaction.editReply({
                     content: 'You need to use a student email from iiitdwd.ac.in',
@@ -57,7 +58,7 @@ export default {
                 return;
             }
 
-            const yearShortStr = match[0];
+            const yearShortStr = match[1];
             const yearShort = Number(yearShortStr);
             if(yearShort < 22 || yearShort > 25) {
                 await interaction.editReply({
@@ -67,7 +68,7 @@ export default {
             }
             const yearTagName = `Y_${yearShort + 4}`;   // Y_<grad year>
 
-            const branchCode = match[1].toUpperCase() as 'BCS' | 'BDS' | 'BEC';
+            const branchCode = match[2].toUpperCase() as 'BCS' | 'BDS' | 'BEC';
             const branchTagName = branchCode === 'BCS'
                     ? 'B_CSE'
                     : branchCode === 'BDS'
