@@ -28,6 +28,6 @@ const webServer = createWebServer({
 });
 
 client.start();
-webServer.listen(`${env.IP}:${env.PORT}`, () => {
+webServer.listen(env.PORT, env.IP, () => {
     logger.info(`Listening on ${env.IP}:${env.PORT}`);
 });
