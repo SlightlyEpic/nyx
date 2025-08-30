@@ -1,6 +1,9 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
+    IP: z.string().min(1),
+    PORT: z.string().min(1),
+
     DISCORD_TOKEN: z.string().min(1),
     DEV_GUILD_ID: z.string().min(1),
     SITE_ORIGIN: z.string().min(1),
@@ -19,6 +22,8 @@ export type Env = z.infer<typeof envSchema>;
 
 export function readEnv(): Env {
     const maybeEnv: Partial<Env> = {
+        IP: process.env.IP,
+        PORT: process.env.PORT,
         DISCORD_TOKEN: process.env.DISCORD_TOKEN,
         DEV_GUILD_ID: process.env.DEV_GUILD_ID,
         SITE_ORIGIN: process.env.SITE_ORIGIN,

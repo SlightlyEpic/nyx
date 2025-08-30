@@ -5,6 +5,7 @@ import { logger } from './lib/logger';
 import { readEnv } from './utils/env';
 import { getDB } from './lib/db';
 import { createNodemailer } from './lib/nodemailer';
+import { createWebServer } from './web/server';
 
 const env = readEnv();
 const db = getDB();
@@ -21,4 +22,14 @@ export const client = new Bot(
     },
 );
 
+const webServer = createWebServer({
+    bot: client,
+    db,
+    env,
+    logger,
+});
+
 client.start();
+webServer.listen(`${env.IP}:${env.PORT}`, () => {
+    console.log(`Listening on ${env.IP}:${env.PORT}`);
+});
