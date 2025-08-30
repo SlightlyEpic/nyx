@@ -43,9 +43,9 @@ export function createWebServer(d: WebServerDeps): express.Express {
             const now = new Date();
             const link = (await Result
                 .ofAsync(() => d.db.query.verifyLinks.findFirst({
-                    where: (vLinks, { eq, and, lt }) => and(
+                    where: (vLinks, { eq, and, gt }) => and(
                         eq(vLinks.secret, secret),
-                        lt(vLinks.expiry, now),
+                        gt(vLinks.expiry, now),
                     ),
                     with: {
                         tags: {

@@ -11,7 +11,7 @@ export function randomString32() {
 }
 
 const LINK_EXPIRY_MSEC = 1000 * 60 * 10;    // 10 minutes
-const LINK_EXPIRY_DURATION = Duration.fromMillis(LINK_EXPIRY_MSEC);
+const LINK_EXPIRY_DURATION = Duration.fromMillis(LINK_EXPIRY_MSEC).rescale().removeZeros();
 
 export default {
     builder: new SlashCommandBuilder()
@@ -80,16 +80,21 @@ export default {
             // Check for already existing links
             const existingLink = (await Result
                 .ofAsync(async () => db.query.verifyLinks.findFirst({
-                    where: (vLinks, { eq, lt, and }) => and(
+                    where: (vLinks, { eq, gt, and }) => and(
                         eq(vLinks.targetDiscordId, interaction.user.id),
-                        lt(vLinks.expiry, new Date()),
+                        gt(vLinks.expiry, new Date()),
                     )
                 }))
                 .withCatch(_err => _err))
                 .expect('Database query failure');
             
             if(existingLink) {
-                const validForStr = DateTime.fromJSDate(existingLink.expiry).diffNow(['minutes', 'seconds']).toHuman();
+                const validForStr = DateTime
+                    .fromJSDate(existingLink.expiry)
+                    .diffNow(['minutes', 'seconds'])
+                    .rescale()
+                    .removeZeros()
+                    .toHuman();
                 const linkExpiryHumanStr = LINK_EXPIRY_DURATION.toHuman({ listStyle: 'long' });
                 await interaction.editReply({
                     content: `A link has already been sent within the last ${linkExpiryHumanStr}. Try again after ${validForStr})`,
